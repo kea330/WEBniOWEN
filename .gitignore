@@ -1,0 +1,5 @@
+/vendor/
+/storage/*.sqlite
+/storage/*.log
+.idea/
+.vscode/
