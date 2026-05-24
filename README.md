@@ -1,27 +1,8 @@
-<<<<<<< HEAD
 # WEBniOWEN — Task Manager (PHP MVC Final Project)
 
 Task Manager MVP on a custom PHP MVC framework.
 
 **GitHub:** https://github.com/kea330/WEBniOWEN
-
-## Setup
-
-```bash
-composer install
-cd public
-php -S localhost:8000
-```
-
-## Structure
-
-`app/` `core/` `config/` `public/` `routes/` `storage/`
-
-See `SOLID-JUSTIFICATION.md` for design notes.
-=======
-# PHP MVC Framework — Final Examination Project
-
-Custom MVC framework built in PHP 8.3+ with a simple **blog posts** MVP on top.
 
 ## Requirements met
 
@@ -52,29 +33,27 @@ php -S localhost:8000 -t public
 
 1. Make sure **mod_rewrite** is enabled in `httpd.conf`.
 2. Open the app through the **public** folder, for example:
-   - `http://localhost/web/WEB/public/`
-   - or `http://localhost/WEB/public/` (depends where your project folder is inside `htdocs`)
+   - `http://localhost/owenweb/public/`
+   - or `http://localhost/WEBniOWEN/public/` (depends where your project folder is inside `htdocs`)
 3. Do **not** open only `http://localhost/` unless that folder contains this project.
 
 If you still see Apache's "resource not found" message, your URL is pointing at the wrong folder — use the `/public/` path above.
 
 The SQLite database file is created automatically at `storage/database.sqlite` on first run.
 
-### Using MySQL (optional)
-
-1. Create a database named `mvc_blog`.
-2. In `config/database.php`, set `'driver' => 'mysql'`.
-3. In `core/Application.php`, change the container binding to `MySQLPostRepository::class`.
-
 ## Project structure
 
 ```
-WEB/
+owenweb/
 ├── app/           # Application (MVP)
+│   ├── Controllers/
+│   ├── Models/
+│   ├── Repositories/
+│   ├── Validation/
+│   └── Views/
 ├── core/          # Framework
 ├── config/
 ├── public/        # Document root
-├── routes/
 ├── storage/       # SQLite + logs
 └── vendor/
 ```
@@ -84,50 +63,52 @@ WEB/
 | Method | URI | Action |
 |--------|-----|--------|
 | GET | `/` | Home page |
-| GET | `/posts` | List all posts |
-| GET | `/posts/create` | Create form |
-| POST | `/posts` | Store new post |
-| GET | `/posts/{id}` | Show one post |
-| GET | `/posts/{id}/edit` | Edit form |
-| POST | `/posts/{id}/update` | Update post |
-| POST | `/posts/{id}/delete` | Delete post |
+| GET | `/tasks` | List all tasks |
+| GET | `/tasks/create` | Create form |
+| POST | `/tasks` | Store new task |
+| GET | `/tasks/{id}` | Show one task |
+| GET | `/tasks/{id}/edit` | Edit form |
+| POST | `/tasks/{id}/update` | Update task |
+| POST | `/tasks/{id}/delete` | Delete task |
 
 ## Design decisions
 
 - **SQLite by default** — easier to demo without MySQL setup; MySQL driver is still included for OCP/LSP.
 - **Simple PHP views** — no Twig/Blade; views are plain PHP files rendered by `Core\View\Engine`.
 - **Basic DI container** — uses reflection for constructor injection; bindings map interfaces to concrete classes.
-- **ORM (Active Record)** — `core/Database/ORM/Model.php` maps models to tables; see `App\Models\Post`.
+- **ORM (Active Record)** — `core/Database/ORM/Model.php` maps models to tables; see `App\Models\Task` and `App\Models\Project`.
 
 ## ORM usage
 
 ```php
-use App\Models\Post;
+use App\Models\Task;
+use App\Models\Project;
 
 // Read
-$posts = Post::all();
-$post = Post::find(1);
+$tasks = Task::all();
+$task = Task::find(1);
+$projects = Project::all();
 
 // Create
-Post::create(['title' => 'Hello', 'body' => 'My first post']);
+Task::create(['title' => 'New Task', 'project_id' => 1]);
+Project::create(['name' => 'My Project']);
 
 // Update
-$post = Post::find(1);
-$post->title = 'Updated title';
-$post->save();
+$task = Task::find(1);
+$task->title = 'Updated title';
+$task->save();
 
 // Delete
-$post->delete();
+$task->delete();
 ```
 
-Controllers use `PostRepositoryInterface`; the repository calls the ORM so SQL stays out of controllers.
+Controllers use repository interfaces; the repository calls the ORM so SQL stays out of controllers.
 - **Separate Router and Dispatcher** — keeps routing logic separate from controller invocation (SRP).
 
 ## MVP description
 
-A minimal blog where you can create, read, update, and delete posts. Forms validate title and body (required, min length). Invalid input shows error messages on the form.
+A minimal task manager where you can create, read, update, and delete tasks organized by projects. Forms validate task titles and project names (required, min length). Invalid input shows error messages on the form.
 
 ## Author
 
 Final project — Advanced Web Development (2025–2026)
->>>>>>> 8879ddd427e6787a602e800dca8e38671064d187
