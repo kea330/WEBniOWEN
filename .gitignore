@@ -1,0 +1,7 @@
+/vendor/
+/storage/*.sqlite
+/storage/*.log
+composer.phar
+.idea/
+.vscode/
+Thumbs.db
